@@ -1,12 +1,17 @@
-FROM golang:1.26.1-alpine@sha256:2389ebfa5b7f43eeafbd6be0c3700cc46690ef842ad962f6c5bd6be49ed82039 AS builder
-WORKDIR /src
-COPY go.mod go.sum ./
-RUN go mod download
+# Use Node.js as base image (builder stage is not necessary for pure JS, but using a slim image is good)
+FROM node:20-alpine AS base
+
+WORKDIR /usr/src/app
+
+# Dependencies
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Copy app source
 COPY . .
-RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /productcatalogservice .
-FROM gcr.io/distroless/static
-WORKDIR /src
-COPY --from=builder /productcatalogservice ./server
-COPY products.json .
+
+# Expose the API port
 EXPOSE 3550
-ENTRYPOINT ["/src/server"]
+
+# Run the app
+CMD [ "npm", "start" ]

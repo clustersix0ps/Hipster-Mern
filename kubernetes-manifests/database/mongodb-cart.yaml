@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-cart
+  namespace: hipster
+spec:
+  selector:
+    matchLabels:
+      app: mongodb-cart
+  template:
+    metadata:
+      labels:
+        app: mongodb-cart
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:6.0
+        ports:
+        - containerPort: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-cart
+  namespace: hipster
+spec:
+  selector:
+    app: mongodb-cart
+  ports:
+  - port: 27017
+    targetPort: 27017

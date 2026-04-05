@@ -1,13 +1,24 @@
-FROM golang:1.26.1-alpine@sha256:2389ebfa5b7f43eeafbd6be0c3700cc46690ef842ad962f6c5bd6be49ed82039 AS builder
-WORKDIR /src
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /go/bin/frontend .
-FROM gcr.io/distroless/static
-WORKDIR /src
-COPY --from=builder /go/bin/frontend /src/server
-COPY ./templates ./templates
-COPY ./static ./static
+FROM node:20-alpine AS builder
+
+WORKDIR /usr/src/app
+
+# Build React client
+WORKDIR /usr/src/app/client
+COPY client/package*.json ./
+RUN npm ci
+
+COPY client/ ./
+RUN npm run build
+
+# Final Stage: Serve statically using lightweight Nginx
+FROM nginx:alpine
+
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy compiled React app from builder
+COPY --from=builder /usr/src/app/client/dist /usr/share/nginx/html
+
 EXPOSE 8080
-ENTRYPOINT ["/src/server"]
+
+CMD ["nginx", "-g", "daemon off;"]
