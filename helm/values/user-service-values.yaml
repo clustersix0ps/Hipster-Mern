@@ -1,0 +1,10 @@
+fullnameOverride: user-service
+namespace: mern-backend
+image:
+  repository: mern/user-service
+  tag: "1.0.0"
+service:
+  port: 3002
+env:
+  PORT: "3002"  MONGO_URI: "mongodb://mongo-user.mern-db.svc.cluster.local:27017/user"
+

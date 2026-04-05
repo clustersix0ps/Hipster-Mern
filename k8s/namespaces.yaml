@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mern-frontend
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mern-backend
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mern-db

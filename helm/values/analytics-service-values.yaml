@@ -1,0 +1,10 @@
+fullnameOverride: analytics-service
+namespace: mern-backend
+image:
+  repository: mern/analytics-service
+  tag: "1.0.0"
+service:
+  port: 3010
+env:
+  PORT: "3010"  MONGO_URI: "mongodb://mongo-shared.mern-db.svc.cluster.local:27017/analytics"
+

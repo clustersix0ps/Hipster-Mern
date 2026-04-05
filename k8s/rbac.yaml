@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: mern-backend
+  name: backend-reader
+rules:
+- apiGroups: [""]
+  resources: ["services", "endpoints"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: backend-reader-binding
+  namespace: mern-backend
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: mern-backend
+roleRef:
+  kind: Role
+  name: backend-reader
+  apiGroup: rbac.authorization.k8s.io

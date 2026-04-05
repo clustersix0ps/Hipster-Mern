@@ -1,0 +1,11 @@
+fullnameOverride: cart-service
+namespace: mern-backend
+image:
+  repository: mern/cart-service
+  tag: "1.0.0"
+service:
+  port: 3005
+env:
+  PORT: "3005"  MONGO_URI: "mongodb://mongo-shared.mern-db.svc.cluster.local:27017/cart"
+  REDIS_URL: "redis://redis-master.mern-db.svc.cluster.local:6379"
+

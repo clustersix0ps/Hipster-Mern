@@ -1,0 +1,10 @@
+fullnameOverride: review-service
+namespace: mern-backend
+image:
+  repository: mern/review-service
+  tag: "1.0.0"
+service:
+  port: 3008
+env:
+  PORT: "3008"  MONGO_URI: "mongodb://mongo-shared.mern-db.svc.cluster.local:27017/review"
+

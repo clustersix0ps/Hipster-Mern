@@ -1,0 +1,8 @@
+fullnameOverride: frontend
+namespace: mern-frontend
+image:
+  repository: mern/frontend
+  tag: "1.0.0"
+service:
+  port: 80
+env: {}

@@ -1,0 +1,10 @@
+fullnameOverride: order-service
+namespace: mern-backend
+image:
+  repository: mern/order-service
+  tag: "1.0.0"
+service:
+  port: 3004
+env:
+  PORT: "3004"  MONGO_URI: "mongodb://mongo-shared.mern-db.svc.cluster.local:27017/order"
+

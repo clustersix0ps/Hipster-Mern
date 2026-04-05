@@ -1,0 +1,10 @@
+fullnameOverride: notification-service
+namespace: mern-backend
+image:
+  repository: mern/notification-service
+  tag: "1.0.0"
+service:
+  port: 3007
+env:
+  PORT: "3007"  MONGO_URI: "mongodb://mongo-shared.mern-db.svc.cluster.local:27017/notification"
+

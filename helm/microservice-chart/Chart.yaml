@@ -1,0 +1,4 @@
+apiVersion: v2
+name: microservice
+description: A unified Helm chart for deploying MERN backend microservices
+version: 0.1.0
