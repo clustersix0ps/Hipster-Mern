@@ -6,8 +6,11 @@ resources:
  - base/secrets.yaml
  - base/configmaps.yaml
  - database/secrets.yaml
-
  - database/mongodb.yaml
+ - database/mongodb-auth.yaml
+ - database/mongodb-cart.yaml
+ - database/mongodb-catalog.yaml
+ - database/mongodb-shared.yaml
  - services/adservice.yaml
  - services/authservice.yaml
  - services/assistantservice.yaml
