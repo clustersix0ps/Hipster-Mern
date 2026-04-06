@@ -1,4 +1,4 @@
-# No URLRewrite — request forwarded directly to assistantservice as-is
+﻿# No URLRewrite â€” request forwarded directly to assistantservice as-is
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -9,7 +9,7 @@ metadata:
     {{- include "hipstershop.labels" . | nindent 4 }}
 spec:
   parentRefs:
-  - name: {{ .Values.gateway.name }}
+  - name: {{ .Values.global.gateway.name }}
   rules:
   - matches:
     - path:
@@ -17,4 +17,5 @@ spec:
         value: /api/assistant/chat
     backendRefs:
     - name: assistantservice
-      port: {{ .Values.ports.assistantservice }}
+      port: {{ .Values.global.ports.assistantservice }}
+

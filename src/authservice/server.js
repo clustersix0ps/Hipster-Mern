@@ -27,7 +27,7 @@ app.get('/_healthz', (req, res) => {
     res.send('ok');
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 8081;
 
 app.listen(PORT, () => {
     console.log(`Auth Service running in ${process.env.NODE_ENV} mode on port ${PORT}`);

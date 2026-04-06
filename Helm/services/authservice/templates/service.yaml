@@ -1,18 +1,21 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: authservice
   namespace: {{ .Release.Namespace }}
   labels:
     app: authservice
-    {{- include "hipstershop.labels" . | nindent 4 }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 spec:
-  replicas: {{ .Values.replicas.authservice }}
+  replicas: {{ .Values.global.replicas.authservice }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable }}
-      maxSurge: {{ .Values.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.global.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.global.rollingUpdate.maxSurge }}
   selector:
     matchLabels:
       app: authservice
@@ -24,7 +27,7 @@ spec:
       terminationGracePeriodSeconds: 5
       initContainers:
       - name: wait-for-mongodb-primary
-        image: {{ .Values.images.mongodb }}
+        image: {{ .Values.global.images.mongodb }}
         envFrom:
         - configMapRef:
             name: hipster-config
@@ -45,9 +48,9 @@ spec:
         - |
           set -e
           check_primary() {
-            mongosh "mongodb://$MONGO_USERNAME:$MONGO_PASSWORD@{{ include "hipstershop.mongoHosts" . }}/admin?replicaSet={{ .Values.mongodb.replicaSetName }}&authSource=admin" \
+            mongosh "mongodb://$MONGO_USERNAME:$MONGO_PASSWORD@mongodb-0.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-1.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-2.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017/admin?replicaSet={{ .Values.global.mongodb.replicaSetName }}&authSource=admin" \
               --quiet --eval "db.hello().isWritablePrimary" | grep -q true || \
-            mongosh "mongodb://{{ include "hipstershop.mongoHosts" . }}/admin?replicaSet={{ .Values.mongodb.replicaSetName }}" \
+            mongosh "mongodb://mongodb-0.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-1.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-2.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017/admin?replicaSet={{ .Values.global.mongodb.replicaSetName }}" \
               --quiet --eval "db.hello().isWritablePrimary" | grep -q true
           }
           echo "Waiting for MongoDB replica set primary..."
@@ -58,9 +61,9 @@ spec:
           echo "MongoDB primary is ready."
       containers:
       - name: server
-        image: {{ .Values.images.authservice }}
+        image: {{ .Values.global.images.authservice }}
         ports:
-        - containerPort: {{ .Values.ports.authservice }}
+        - containerPort: {{ .Values.global.ports.authservice }}
         envFrom:
         - configMapRef:
             name: hipster-config
@@ -81,7 +84,7 @@ spec:
               name: mongodb-config
               key: AUTH_DB_NAME
         - name: MONGO_URI
-          value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@{{ include "hipstershop.mongoHosts" . }}/{{ .Values.mongodb.users.auth.database }}?replicaSet={{ .Values.mongodb.replicaSetName }}&authSource={{ .Values.mongodb.users.auth.database }}&authMechanism=SCRAM-SHA-256"
+          value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@mongodb-0.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-1.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-2.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017/{{ .Values.global.mongodb.users.auth.database }}?replicaSet={{ .Values.global.mongodb.replicaSetName }}&authSource={{ .Values.global.mongodb.users.auth.database }}&authMechanism=SCRAM-SHA-256"
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
@@ -96,20 +99,20 @@ spec:
           initialDelaySeconds: 10
           httpGet:
             path: "/_healthz"
-            port: {{ .Values.ports.authservice }}
+            port: {{ .Values.global.ports.authservice }}
         livenessProbe:
           initialDelaySeconds: 15
           periodSeconds: 10
           httpGet:
             path: "/_healthz"
-            port: {{ .Values.ports.authservice }}
+            port: {{ .Values.global.ports.authservice }}
         resources:
           requests:
-            cpu: {{ .Values.resources.standard.requests.cpu }}
-            memory: {{ .Values.resources.standard.requests.memory }}
+            cpu: {{ .Values.global.resources.standard.requests.cpu }}
+            memory: {{ .Values.global.resources.standard.requests.memory }}
           limits:
-            cpu: {{ .Values.resources.standard.limits.cpu }}
-            memory: {{ .Values.resources.standard.limits.memory }}
+            cpu: {{ .Values.global.resources.standard.limits.cpu }}
+            memory: {{ .Values.global.resources.standard.limits.memory }}
 ---
 apiVersion: v1
 kind: Service
@@ -118,12 +121,16 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: authservice
-    {{- include "hipstershop.labels" . | nindent 4 }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 spec:
   type: ClusterIP
   selector:
     app: authservice
   ports:
   - name: http
-    port: {{ .Values.ports.authservice }}
-    targetPort: {{ .Values.ports.authservice }}
+    port: {{ .Values.global.ports.authservice }}
+    targetPort: {{ .Values.global.ports.authservice }}
+

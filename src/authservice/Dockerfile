@@ -7,6 +7,6 @@ RUN npm ci --only=production
 
 COPY . .
 
-EXPOSE 4000
+EXPOSE 8081
 
 CMD [ "npm", "start" ]

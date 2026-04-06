@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: loadgenerator
@@ -7,7 +7,7 @@ metadata:
     app: loadgenerator
     {{- include "hipstershop.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicas.loadgenerator }}
+  replicas: {{ .Values.global.replicas.loadgenerator }}
   selector:
     matchLabels:
       app: loadgenerator
@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: load-generator
-        image: {{ .Values.images.loadgenerator }}
+        image: {{ .Values.global.images.loadgenerator }}
         command: ["/bin/sh"]
         args:
         - -c
@@ -29,9 +29,10 @@ spec:
           done
         resources:
           requests:
-            cpu: {{ .Values.resources.standard.requests.cpu }}
-            memory: {{ .Values.resources.standard.requests.memory }}
+            cpu: {{ .Values.global.resources.standard.requests.cpu }}
+            memory: {{ .Values.global.resources.standard.requests.memory }}
           limits:
-            cpu: {{ .Values.resources.standard.limits.cpu }}
-            memory: {{ .Values.resources.standard.limits.memory }}
+            cpu: {{ .Values.global.resources.standard.limits.cpu }}
+            memory: {{ .Values.global.resources.standard.limits.memory }}
       restartPolicy: Always
+

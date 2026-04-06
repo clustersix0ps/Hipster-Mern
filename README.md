@@ -64,8 +64,14 @@ MongoDB Replica Set (3 pods)
 ### Deploy with Helm
 
 ```bash
-# Create namespace and deploy
+# Create namespace and deploy full stack (umbrella chart)
 helm install hipstershop ./Helm -n hipster --create-namespace
+
+# Optional: deploy only one service chart (example: authservice)
+helm install authservice ./Helm/services/authservice -n hipster --create-namespace -f ./Helm/values.yaml
+
+# For CI/CD, always pass secrets via a secure values file or --set flags
+# helm install hipstershop ./Helm -n hipster -f ci-values.yaml
 
 # Check deployment status
 kubectl get pods -n hipster
@@ -192,11 +198,14 @@ HipsterShop/
 ├── Helm/                         # Helm charts
 │   ├── Chart.yaml
 │   ├── values.yaml
+│   ├── services/                 # One standalone chart per microservice
+│   │   ├── adservice/
+│   │   ├── authservice/
+│   │   └── ...
 │   └── templates/
 │       ├── configmaps.yaml
 │       ├── secrets.yaml
 │       ├── namespace.yaml
-│       ├── services/             # Service deployments
 │       └── database/             # MongoDB templates
 ├── kubernetes-manifests/         # Raw Kubernetes YAML
 │   ├── base/
@@ -206,14 +215,24 @@ HipsterShop/
 │   ├── HPA/                       # Autoscaling
 │   └── kustomization.yaml
 ├── src/                          # Source code
-│   ├── frontend/                 # Go (SSR)
-│   ├── authservice/              # Go
-│   ├── cartservice/              # C#
+│   ├── frontend/                 # React + Nginx
+│   ├── authservice/              # Node.js
+│   ├── cartservice/              # Node.js
 │   ├── assistantservice/         # Python (Gemini AI)
 │   ├── paymentservice/           # Node.js
 │   └── ...12 services total
 └── image-scanning/               # Security scanning
 ```
+
+## Secrets and Configuration
+
+- Default secrets in Helm and raw manifests are placeholders by design.
+- Set real values at deploy time from CI/CD secrets manager.
+- Helm uses a single shared values file: `Helm/values.yaml` (under `global:`).
+- Files that require secure overrides:
+    - `Helm/values.yaml`
+    - `kubernetes-manifests/base/secrets.yaml`
+    - `kubernetes-manifests/database/secrets.yaml`
 
 ## Common Commands
 

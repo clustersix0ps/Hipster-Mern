@@ -1,4 +1,4 @@
-# Checkout HTTPRoute — /api/checkout → /checkout on checkoutservice:5050
+﻿# Checkout HTTPRoute â€” /api/checkout â†’ /checkout on checkoutservice:5050
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -9,7 +9,7 @@ metadata:
     {{- include "hipstershop.labels" . | nindent 4 }}
 spec:
   parentRefs:
-  - name: {{ .Values.gateway.name }}
+  - name: {{ .Values.global.gateway.name }}
   rules:
   - matches:
     - path:
@@ -23,4 +23,5 @@ spec:
           replaceFullPath: /checkout
     backendRefs:
     - name: checkoutservice
-      port: {{ .Values.ports.checkoutservice }}
+      port: {{ .Values.global.ports.checkoutservice }}
+

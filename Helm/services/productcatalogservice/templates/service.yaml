@@ -1,18 +1,21 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: productcatalogservice
   namespace: {{ .Release.Namespace }}
   labels:
     app: productcatalogservice
-    {{- include "hipstershop.labels" . | nindent 4 }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 spec:
-  replicas: {{ .Values.replicas.productcatalogservice }}
+  replicas: {{ .Values.global.replicas.productcatalogservice }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable }}
-      maxSurge: {{ .Values.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.global.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.global.rollingUpdate.maxSurge }}
   selector:
     matchLabels:
       app: productcatalogservice
@@ -24,9 +27,9 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: {{ .Values.images.productcatalogservice }}
+        image: {{ .Values.global.images.productcatalogservice }}
         ports:
-        - containerPort: {{ .Values.ports.productcatalogservice }}
+        - containerPort: {{ .Values.global.ports.productcatalogservice }}
         envFrom:
         - configMapRef:
             name: hipster-config
@@ -59,27 +62,27 @@ spec:
         - name: PRODUCTS_FALLBACK_LOCAL
           value: "true"
         - name: MONGO_URI
-          value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@{{ include "hipstershop.mongoHosts" . }}/{{ .Values.mongodb.users.catalog.database }}?replicaSet={{ .Values.mongodb.replicaSetName }}&authSource={{ .Values.mongodb.users.catalog.database }}&authMechanism=SCRAM-SHA-256"
+          value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@mongodb-0.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-1.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-2.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017/{{ .Values.global.mongodb.users.catalog.database }}?replicaSet={{ .Values.global.mongodb.replicaSetName }}&authSource={{ .Values.global.mongodb.users.catalog.database }}&authMechanism=SCRAM-SHA-256"
         readinessProbe:
           initialDelaySeconds: 20
           periodSeconds: 5
           httpGet:
             path: "/_healthz"
-            port: {{ .Values.ports.productcatalogservice }}
+            port: {{ .Values.global.ports.productcatalogservice }}
         livenessProbe:
           initialDelaySeconds: 40
           failureThreshold: 6
           periodSeconds: 5
           httpGet:
             path: "/_healthz"
-            port: {{ .Values.ports.productcatalogservice }}
+            port: {{ .Values.global.ports.productcatalogservice }}
         resources:
           requests:
-            cpu: {{ .Values.resources.standard.requests.cpu }}
-            memory: {{ .Values.resources.standard.requests.memory }}
+            cpu: {{ .Values.global.resources.standard.requests.cpu }}
+            memory: {{ .Values.global.resources.standard.requests.memory }}
           limits:
-            cpu: {{ .Values.resources.standard.limits.cpu }}
-            memory: {{ .Values.resources.standard.limits.memory }}
+            cpu: {{ .Values.global.resources.standard.limits.cpu }}
+            memory: {{ .Values.global.resources.standard.limits.memory }}
 ---
 apiVersion: v1
 kind: Service
@@ -88,12 +91,16 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: productcatalogservice
-    {{- include "hipstershop.labels" . | nindent 4 }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 spec:
   type: ClusterIP
   selector:
     app: productcatalogservice
   ports:
   - name: http
-    port: {{ .Values.ports.productcatalogservice }}
-    targetPort: {{ .Values.ports.productcatalogservice }}
+    port: {{ .Values.global.ports.productcatalogservice }}
+    targetPort: {{ .Values.global.ports.productcatalogservice }}
+

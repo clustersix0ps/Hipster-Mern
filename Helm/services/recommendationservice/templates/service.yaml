@@ -1,18 +1,21 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: recommendationservice
   namespace: {{ .Release.Namespace }}
   labels:
     app: recommendationservice
-    {{- include "hipstershop.labels" . | nindent 4 }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 spec:
-  replicas: {{ .Values.replicas.recommendationservice }}
+  replicas: {{ .Values.global.replicas.recommendationservice }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable }}
-      maxSurge: {{ .Values.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.global.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.global.rollingUpdate.maxSurge }}
   selector:
     matchLabels:
       app: recommendationservice
@@ -24,19 +27,19 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: {{ .Values.images.recommendationservice }}
+        image: {{ .Values.global.images.recommendationservice }}
         ports:
-        - containerPort: {{ .Values.ports.recommendationservice }}
+        - containerPort: {{ .Values.global.ports.recommendationservice }}
         readinessProbe:
           periodSeconds: 5
           httpGet:
             path: "/_healthz"
-            port: {{ .Values.ports.recommendationservice }}
+            port: {{ .Values.global.ports.recommendationservice }}
         livenessProbe:
           periodSeconds: 5
           httpGet:
             path: "/_healthz"
-            port: {{ .Values.ports.recommendationservice }}
+            port: {{ .Values.global.ports.recommendationservice }}
         envFrom:
         - configMapRef:
             name: hipster-config
@@ -72,14 +75,14 @@ spec:
               name: mongodb-config
               key: ANALYTICS_RECOMMENDATIONS_COLLECTION
         - name: MONGO_URI
-          value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@{{ include "hipstershop.mongoHosts" . }}/{{ .Values.mongodb.users.analytics.database }}?replicaSet={{ .Values.mongodb.replicaSetName }}&authSource={{ .Values.mongodb.users.analytics.database }}&authMechanism=SCRAM-SHA-256"
+          value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@mongodb-0.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-1.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-2.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017/{{ .Values.global.mongodb.users.analytics.database }}?replicaSet={{ .Values.global.mongodb.replicaSetName }}&authSource={{ .Values.global.mongodb.users.analytics.database }}&authMechanism=SCRAM-SHA-256"
         resources:
           requests:
-            cpu: {{ .Values.resources.recommendation.requests.cpu }}
-            memory: {{ .Values.resources.recommendation.requests.memory }}
+            cpu: {{ .Values.global.resources.recommendation.requests.cpu }}
+            memory: {{ .Values.global.resources.recommendation.requests.memory }}
           limits:
-            cpu: {{ .Values.resources.recommendation.limits.cpu }}
-            memory: {{ .Values.resources.recommendation.limits.memory }}
+            cpu: {{ .Values.global.resources.recommendation.limits.cpu }}
+            memory: {{ .Values.global.resources.recommendation.limits.memory }}
 ---
 apiVersion: v1
 kind: Service
@@ -88,12 +91,16 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: recommendationservice
-    {{- include "hipstershop.labels" . | nindent 4 }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 spec:
   type: ClusterIP
   selector:
     app: recommendationservice
   ports:
   - name: http
-    port: {{ .Values.ports.recommendationservice }}
-    targetPort: {{ .Values.ports.recommendationservice }}
+    port: {{ .Values.global.ports.recommendationservice }}
+    targetPort: {{ .Values.global.ports.recommendationservice }}
+

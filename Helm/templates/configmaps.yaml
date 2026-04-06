@@ -1,4 +1,4 @@
-# ── ConfigMap: hipster-config ──────────────────────────────────────────────────
+﻿# â”€â”€ ConfigMap: hipster-config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,13 +7,13 @@ metadata:
   labels:
     {{- include "hipstershop.labels" . | nindent 4 }}
 data:
-  ENABLE_TRACING: {{ .Values.appConfig.enableTracing | quote }}
-  COLLECTOR_SERVICE_ADDR: {{ .Values.appConfig.collectorServiceAddr | quote }}
-  FRONTEND_MESSAGE: {{ .Values.appConfig.frontendMessage | quote }}
-  ENABLE_ASSISTANT: {{ .Values.appConfig.enableAssistant | quote }}
+  ENABLE_TRACING: {{ .Values.global.appConfig.enableTracing | quote }}
+  COLLECTOR_SERVICE_ADDR: {{ .Values.global.appConfig.collectorServiceAddr | quote }}
+  FRONTEND_MESSAGE: {{ .Values.global.appConfig.frontendMessage | quote }}
+  ENABLE_ASSISTANT: {{ .Values.global.appConfig.enableAssistant | quote }}
 
 ---
-# ── ConfigMap: service-addresses ──────────────────────────────────────────────
+# â”€â”€ ConfigMap: service-addresses â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -22,16 +22,16 @@ metadata:
   labels:
     {{- include "hipstershop.labels" . | nindent 4 }}
 data:
-  GATEWAY_ADDR: "{{ .Values.gateway.name }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.gateway.port }}"
-  PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:{{ .Values.ports.productcatalogservice }}"
-  SHIPPING_SERVICE_ADDR: "shippingservice:{{ .Values.ports.shippingservice }}"
-  PAYMENT_SERVICE_ADDR: "paymentservice:{{ .Values.ports.paymentservice }}"
-  EMAIL_SERVICE_ADDR: "emailservice:{{ .Values.ports.emailservice }}"
-  CURRENCY_SERVICE_ADDR: "currencyservice:{{ .Values.ports.currencyservice }}"
-  CART_SERVICE_ADDR: "cartservice:{{ .Values.ports.cartservice }}"
+  GATEWAY_ADDR: "{{ .Values.global.gateway.name }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.global.gateway.port }}"
+  PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:{{ .Values.global.ports.productcatalogservice }}"
+  SHIPPING_SERVICE_ADDR: "shippingservice:{{ .Values.global.ports.shippingservice }}"
+  PAYMENT_SERVICE_ADDR: "paymentservice:{{ .Values.global.ports.paymentservice }}"
+  EMAIL_SERVICE_ADDR: "emailservice:{{ .Values.global.ports.emailservice }}"
+  CURRENCY_SERVICE_ADDR: "currencyservice:{{ .Values.global.ports.currencyservice }}"
+  CART_SERVICE_ADDR: "cartservice:{{ .Values.global.ports.cartservice }}"
 
 ---
-# ── ConfigMap: service-ports ───────────────────────────────────────────────────
+# â”€â”€ ConfigMap: service-ports â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -40,20 +40,20 @@ metadata:
   labels:
     {{- include "hipstershop.labels" . | nindent 4 }}
 data:
-  ADSERVICE_PORT: {{ .Values.ports.adservice | quote }}
-  AUTHSERVICE_PORT: {{ .Values.ports.authservice | quote }}
-  CARTSERVICE_PORT: {{ .Values.ports.cartservice | quote }}
-  CHECKOUTSERVICE_PORT: {{ .Values.ports.checkoutservice | quote }}
-  CURRENCYSERVICE_PORT: {{ .Values.ports.currencyservice | quote }}
-  EMAILSERVICE_PORT: {{ .Values.ports.emailservice | quote }}
-  FRONTEND_PORT: {{ .Values.ports.frontend | quote }}
-  PAYMENTSERVICE_PORT: {{ .Values.ports.paymentservice | quote }}
-  PRODUCTCATALOG_PORT: {{ .Values.ports.productcatalogservice | quote }}
-  RECOMMENDATIONSERVICE_PORT: {{ .Values.ports.recommendationservice | quote }}
-  SHIPPINGSERVICE_PORT: {{ .Values.ports.shippingservice | quote }}
+  ADSERVICE_PORT: {{ .Values.global.ports.adservice | quote }}
+  AUTHSERVICE_PORT: {{ .Values.global.ports.authservice | quote }}
+  CARTSERVICE_PORT: {{ .Values.global.ports.cartservice | quote }}
+  CHECKOUTSERVICE_PORT: {{ .Values.global.ports.checkoutservice | quote }}
+  CURRENCYSERVICE_PORT: {{ .Values.global.ports.currencyservice | quote }}
+  EMAILSERVICE_PORT: {{ .Values.global.ports.emailservice | quote }}
+  FRONTEND_PORT: {{ .Values.global.ports.frontend | quote }}
+  PAYMENTSERVICE_PORT: {{ .Values.global.ports.paymentservice | quote }}
+  PRODUCTCATALOG_PORT: {{ .Values.global.ports.productcatalogservice | quote }}
+  RECOMMENDATIONSERVICE_PORT: {{ .Values.global.ports.recommendationservice | quote }}
+  SHIPPINGSERVICE_PORT: {{ .Values.global.ports.shippingservice | quote }}
 
 ---
-# ── ConfigMap: mongodb-config ──────────────────────────────────────────────────
+# â”€â”€ ConfigMap: mongodb-config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -62,23 +62,23 @@ metadata:
   labels:
     {{- include "hipstershop.labels" . | nindent 4 }}
 data:
-  MONGO_REPLICA_SET: {{ .Values.mongodbConfig.replicaSet | quote }}
-  AUTH_DB_NAME: {{ .Values.mongodb.users.auth.database | quote }}
-  CART_DB_NAME: {{ .Values.mongodb.users.cart.database | quote }}
-  CATALOG_DB_NAME: {{ .Values.mongodb.users.catalog.database | quote }}
-  ORDER_DB_NAME: {{ .Values.mongodb.users.order.database | quote }}
-  PAYMENT_DB_NAME: {{ .Values.mongodb.users.payment.database | quote }}
-  NOTIFICATION_DB_NAME: {{ .Values.mongodb.users.notification.database | quote }}
-  ANALYTICS_DB_NAME: {{ .Values.mongodb.users.analytics.database | quote }}
-  CATALOG_PRODUCTS_COLLECTION: {{ .Values.mongodbConfig.catalogProductsCollection | quote }}
-  ORDER_ORDERS_COLLECTION: {{ .Values.mongodbConfig.orderOrdersCollection | quote }}
-  ORDER_EVENTS_COLLECTION: {{ .Values.mongodbConfig.orderEventsCollection | quote }}
-  PAYMENT_CHARGES_COLLECTION: {{ .Values.mongodbConfig.paymentChargesCollection | quote }}
-  ANALYTICS_RECOMMENDATIONS_COLLECTION: {{ .Values.mongodbConfig.analyticsRecommendationsCollection | quote }}
-  NOTIFICATION_EMAIL_EVENTS_COLLECTION: {{ .Values.mongodbConfig.notificationEmailEventsCollection | quote }}
+  MONGO_REPLICA_SET: {{ .Values.global.mongodbConfig.replicaSet | quote }}
+  AUTH_DB_NAME: {{ .Values.global.mongodb.users.auth.database | quote }}
+  CART_DB_NAME: {{ .Values.global.mongodb.users.cart.database | quote }}
+  CATALOG_DB_NAME: {{ .Values.global.mongodb.users.catalog.database | quote }}
+  ORDER_DB_NAME: {{ .Values.global.mongodb.users.order.database | quote }}
+  PAYMENT_DB_NAME: {{ .Values.global.mongodb.users.payment.database | quote }}
+  NOTIFICATION_DB_NAME: {{ .Values.global.mongodb.users.notification.database | quote }}
+  ANALYTICS_DB_NAME: {{ .Values.global.mongodb.users.analytics.database | quote }}
+  CATALOG_PRODUCTS_COLLECTION: {{ .Values.global.mongodbConfig.catalogProductsCollection | quote }}
+  ORDER_ORDERS_COLLECTION: {{ .Values.global.mongodbConfig.orderOrdersCollection | quote }}
+  ORDER_EVENTS_COLLECTION: {{ .Values.global.mongodbConfig.orderEventsCollection | quote }}
+  PAYMENT_CHARGES_COLLECTION: {{ .Values.global.mongodbConfig.paymentChargesCollection | quote }}
+  ANALYTICS_RECOMMENDATIONS_COLLECTION: {{ .Values.global.mongodbConfig.analyticsRecommendationsCollection | quote }}
+  NOTIFICATION_EMAIL_EVENTS_COLLECTION: {{ .Values.global.mongodbConfig.notificationEmailEventsCollection | quote }}
 
 ---
-# ── ConfigMap: app-features ────────────────────────────────────────────────────
+# â”€â”€ ConfigMap: app-features â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -87,7 +87,8 @@ metadata:
   labels:
     {{- include "hipstershop.labels" . | nindent 4 }}
 data:
-  CURRENCY_SERVICE_RANDOM_ERROR: {{ .Values.features.currencyServiceRandomError | quote }}
-  PAYMENT_SERVICE_DISABLE_PROFILER: {{ .Values.features.paymentServiceDisableProfiler | quote }}
-  PRODUCT_CATALOG_SEED_DATABASE: {{ .Values.features.productCatalogSeedDatabase | quote }}
-  GEMINI_MODEL: {{ .Values.features.geminiModel | quote }}
+  CURRENCY_SERVICE_RANDOM_ERROR: {{ .Values.global.features.currencyServiceRandomError | quote }}
+  PAYMENT_SERVICE_DISABLE_PROFILER: {{ .Values.global.features.paymentServiceDisableProfiler | quote }}
+  PRODUCT_CATALOG_SEED_DATABASE: {{ .Values.global.features.productCatalogSeedDatabase | quote }}
+  GEMINI_MODEL: {{ .Values.global.features.geminiModel | quote }}
+

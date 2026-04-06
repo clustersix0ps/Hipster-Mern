@@ -1,4 +1,4 @@
-apiVersion: batch/v1
+﻿apiVersion: batch/v1
 kind: Job
 metadata:
   name: mongo-seed-products
@@ -16,7 +16,7 @@ spec:
       restartPolicy: OnFailure
       containers:
       - name: mongo-seed-products
-        image: {{ .Values.images.mongodb }}
+        image: {{ .Values.global.images.mongodb }}
         env:
         - name: MONGO_ROOT_USERNAME
           valueFrom:
@@ -35,7 +35,7 @@ spec:
           set -e
 
           check_primary() {
-            mongosh "mongodb://$MONGO_ROOT_USERNAME:$MONGO_ROOT_PASSWORD@mongodb-0.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-1.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-2.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017/admin?replicaSet={{ .Values.mongodb.replicaSetName }}&authSource=admin" --quiet --eval "db.hello().isWritablePrimary" | grep -q true
+            mongosh "mongodb://$MONGO_ROOT_USERNAME:$MONGO_ROOT_PASSWORD@mongodb-0.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-1.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-2.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017/admin?replicaSet={{ .Values.global.mongodb.replicaSetName }}&authSource=admin" --quiet --eval "db.hello().isWritablePrimary" | grep -q true
           }
 
           echo "Waiting for writable MongoDB primary for catalog seed..."
@@ -44,7 +44,7 @@ spec:
             sleep 3
           done
 
-          mongosh "mongodb://$MONGO_ROOT_USERNAME:$MONGO_ROOT_PASSWORD@mongodb-0.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-1.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-2.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017/admin?replicaSet={{ .Values.mongodb.replicaSetName }}&authSource=admin" --eval '
+          mongosh "mongodb://$MONGO_ROOT_USERNAME:$MONGO_ROOT_PASSWORD@mongodb-0.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-1.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-2.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017/admin?replicaSet={{ .Values.global.mongodb.replicaSetName }}&authSource=admin" --eval '
             var catalogDb = db.getSiblingDB("catalog_db");
             var coll = catalogDb.getCollection("products");
 
@@ -69,3 +69,4 @@ spec:
 
             print("Seed complete. Product count: " + coll.countDocuments({}));
           '
+

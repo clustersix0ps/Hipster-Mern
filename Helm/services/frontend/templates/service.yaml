@@ -1,18 +1,21 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
   namespace: {{ .Release.Namespace }}
   labels:
     app: frontend
-    {{- include "hipstershop.labels" . | nindent 4 }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 spec:
-  replicas: {{ .Values.replicas.frontend }}
+  replicas: {{ .Values.global.replicas.frontend }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable }}
-      maxSurge: {{ .Values.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.global.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.global.rollingUpdate.maxSurge }}
   selector:
     matchLabels:
       app: frontend
@@ -23,14 +26,14 @@ spec:
     spec:
       containers:
       - name: server
-        image: {{ .Values.images.frontend }}
+        image: {{ .Values.global.images.frontend }}
         ports:
-        - containerPort: {{ .Values.ports.frontend }}
+        - containerPort: {{ .Values.global.ports.frontend }}
         readinessProbe:
           initialDelaySeconds: 10
           httpGet:
             path: "/_healthz"
-            port: {{ .Values.ports.frontend }}
+            port: {{ .Values.global.ports.frontend }}
             httpHeaders:
             - name: "Cookie"
               value: "shop_session-id=x-readiness-probe"
@@ -38,7 +41,7 @@ spec:
           initialDelaySeconds: 10
           httpGet:
             path: "/_healthz"
-            port: {{ .Values.ports.frontend }}
+            port: {{ .Values.global.ports.frontend }}
             httpHeaders:
             - name: "Cookie"
               value: "shop_session-id=x-liveness-probe"
@@ -63,11 +66,11 @@ spec:
               key: JWT_SECRET
         resources:
           requests:
-            cpu: {{ .Values.resources.standard.requests.cpu }}
-            memory: {{ .Values.resources.standard.requests.memory }}
+            cpu: {{ .Values.global.resources.standard.requests.cpu }}
+            memory: {{ .Values.global.resources.standard.requests.memory }}
           limits:
-            cpu: {{ .Values.resources.standard.limits.cpu }}
-            memory: {{ .Values.resources.standard.limits.memory }}
+            cpu: {{ .Values.global.resources.standard.limits.cpu }}
+            memory: {{ .Values.global.resources.standard.limits.memory }}
 ---
 apiVersion: v1
 kind: Service
@@ -76,12 +79,16 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: frontend
-    {{- include "hipstershop.labels" . | nindent 4 }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 spec:
   type: ClusterIP
   selector:
     app: frontend
   ports:
   - name: http
-    port: {{ .Values.ports.frontendSvc }}
-    targetPort: {{ .Values.ports.frontend }}
+    port: {{ .Values.global.ports.frontendSvc }}
+    targetPort: {{ .Values.global.ports.frontend }}
+

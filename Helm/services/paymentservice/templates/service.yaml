@@ -1,18 +1,21 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: paymentservice
   namespace: {{ .Release.Namespace }}
   labels:
     app: paymentservice
-    {{- include "hipstershop.labels" . | nindent 4 }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 spec:
-  replicas: {{ .Values.replicas.paymentservice }}
+  replicas: {{ .Values.global.replicas.paymentservice }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable }}
-      maxSurge: {{ .Values.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.global.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.global.rollingUpdate.maxSurge }}
   selector:
     matchLabels:
       app: paymentservice
@@ -24,9 +27,9 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: {{ .Values.images.paymentservice }}
+        image: {{ .Values.global.images.paymentservice }}
         ports:
-        - containerPort: {{ .Values.ports.paymentservice }}
+        - containerPort: {{ .Values.global.ports.paymentservice }}
         envFrom:
         - configMapRef:
             name: hipster-config
@@ -62,22 +65,22 @@ spec:
               name: mongodb-config
               key: PAYMENT_CHARGES_COLLECTION
         - name: MONGO_URI
-          value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@{{ include "hipstershop.mongoHosts" . }}/{{ .Values.mongodb.users.payment.database }}?replicaSet={{ .Values.mongodb.replicaSetName }}&authSource={{ .Values.mongodb.users.payment.database }}&authMechanism=SCRAM-SHA-256"
+          value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@mongodb-0.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-1.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017,mongodb-2.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017/{{ .Values.global.mongodb.users.payment.database }}?replicaSet={{ .Values.global.mongodb.replicaSetName }}&authSource={{ .Values.global.mongodb.users.payment.database }}&authMechanism=SCRAM-SHA-256"
         readinessProbe:
           httpGet:
             path: "/_healthz"
-            port: {{ .Values.ports.paymentservice }}
+            port: {{ .Values.global.ports.paymentservice }}
         livenessProbe:
           httpGet:
             path: "/_healthz"
-            port: {{ .Values.ports.paymentservice }}
+            port: {{ .Values.global.ports.paymentservice }}
         resources:
           requests:
-            cpu: {{ .Values.resources.standard.requests.cpu }}
-            memory: {{ .Values.resources.standard.requests.memory }}
+            cpu: {{ .Values.global.resources.standard.requests.cpu }}
+            memory: {{ .Values.global.resources.standard.requests.memory }}
           limits:
-            cpu: {{ .Values.resources.standard.limits.cpu }}
-            memory: {{ .Values.resources.standard.limits.memory }}
+            cpu: {{ .Values.global.resources.standard.limits.cpu }}
+            memory: {{ .Values.global.resources.standard.limits.memory }}
 ---
 apiVersion: v1
 kind: Service
@@ -86,12 +89,16 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app: paymentservice
-    {{- include "hipstershop.labels" . | nindent 4 }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 spec:
   type: ClusterIP
   selector:
     app: paymentservice
   ports:
   - name: http
-    port: {{ .Values.ports.paymentservice }}
-    targetPort: {{ .Values.ports.paymentservice }}
+    port: {{ .Values.global.ports.paymentservice }}
+    targetPort: {{ .Values.global.ports.paymentservice }}
+

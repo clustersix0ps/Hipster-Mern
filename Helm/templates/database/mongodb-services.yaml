@@ -1,4 +1,4 @@
-# ── Headless Service ──────────────────────────────────────────────────────────
+﻿# â”€â”€ Headless Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # clusterIP: None means DNS returns individual Pod IPs (not a virtual IP).
 # Required by StatefulSet for stable Pod DNS:
 #   mongodb-0.mongo-headless.<namespace>.svc.cluster.local
@@ -22,8 +22,8 @@ spec:
     targetPort: 27017
 
 ---
-# ── ClusterIP Service ─────────────────────────────────────────────────────────
-# Standard ClusterIP — clients can reach any MongoDB pod via a stable VIP.
+# â”€â”€ ClusterIP Service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Standard ClusterIP â€” clients can reach any MongoDB pod via a stable VIP.
 # The replica set driver handles routing to the PRIMARY automatically.
 apiVersion: v1
 kind: Service
@@ -41,3 +41,4 @@ spec:
   - name: mongo
     port: 27017
     targetPort: 27017
+

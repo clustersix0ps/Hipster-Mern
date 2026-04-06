@@ -1,5 +1,5 @@
-# Frontend HTTPRoute — catches all user-facing paths and routes to the frontend service.
-# No URL rewriting needed — paths are forwarded as-is.
+﻿# Frontend HTTPRoute â€” catches all user-facing paths and routes to the frontend service.
+# No URL rewriting needed â€” paths are forwarded as-is.
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -10,7 +10,7 @@ metadata:
     {{- include "hipstershop.labels" . | nindent 4 }}
 spec:
   parentRefs:
-  - name: {{ .Values.gateway.name }}
+  - name: {{ .Values.global.gateway.name }}
   rules:
   - matches:
     - path:
@@ -18,60 +18,61 @@ spec:
         value: /static/
     backendRefs:
     - name: frontend
-      port: {{ .Values.ports.frontendSvc }}
+      port: {{ .Values.global.ports.frontendSvc }}
   - matches:
     - path:
         type: Exact
         value: /_healthz
     backendRefs:
     - name: frontend
-      port: {{ .Values.ports.frontendSvc }}
+      port: {{ .Values.global.ports.frontendSvc }}
   - matches:
     - path:
         type: PathPrefix
         value: /product
     backendRefs:
     - name: frontend
-      port: {{ .Values.ports.frontendSvc }}
+      port: {{ .Values.global.ports.frontendSvc }}
   - matches:
     - path:
         type: PathPrefix
         value: /cart
     backendRefs:
     - name: frontend
-      port: {{ .Values.ports.frontendSvc }}
+      port: {{ .Values.global.ports.frontendSvc }}
   - matches:
     - path:
         type: Exact
         value: /setCurrency
     backendRefs:
     - name: frontend
-      port: {{ .Values.ports.frontendSvc }}
+      port: {{ .Values.global.ports.frontendSvc }}
   - matches:
     - path:
         type: Exact
         value: /login
     backendRefs:
     - name: frontend
-      port: {{ .Values.ports.frontendSvc }}
+      port: {{ .Values.global.ports.frontendSvc }}
   - matches:
     - path:
         type: Exact
         value: /signup
     backendRefs:
     - name: frontend
-      port: {{ .Values.ports.frontendSvc }}
+      port: {{ .Values.global.ports.frontendSvc }}
   - matches:
     - path:
         type: Exact
         value: /logout
     backendRefs:
     - name: frontend
-      port: {{ .Values.ports.frontendSvc }}
+      port: {{ .Values.global.ports.frontendSvc }}
   - matches:
     - path:
         type: Exact
         value: /
     backendRefs:
     - name: frontend
-      port: {{ .Values.ports.frontendSvc }}
+      port: {{ .Values.global.ports.frontendSvc }}
+

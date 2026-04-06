@@ -1,4 +1,4 @@
-# ProductCatalog HTTPRoute — two rules, PathPrefix + Exact
+﻿# ProductCatalog HTTPRoute â€” two rules, PathPrefix + Exact
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -9,7 +9,7 @@ metadata:
     {{- include "hipstershop.labels" . | nindent 4 }}
 spec:
   parentRefs:
-  - name: {{ .Values.gateway.name }}
+  - name: {{ .Values.global.gateway.name }}
   rules:
   - matches:
     - path:
@@ -23,7 +23,7 @@ spec:
           replacePrefixMatch: /products/
     backendRefs:
     - name: productcatalogservice
-      port: {{ .Values.ports.productcatalogservice }}
+      port: {{ .Values.global.ports.productcatalogservice }}
   - matches:
     - path:
         type: Exact
@@ -36,4 +36,5 @@ spec:
           replaceFullPath: /products
     backendRefs:
     - name: productcatalogservice
-      port: {{ .Values.ports.productcatalogservice }}
+      port: {{ .Values.global.ports.productcatalogservice }}
+

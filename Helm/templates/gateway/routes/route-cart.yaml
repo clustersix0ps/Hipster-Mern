@@ -1,4 +1,4 @@
-# Cart HTTPRoute — strips /api prefix: /api/cart → /cart on cartservice:7070
+﻿# Cart HTTPRoute â€” strips /api prefix: /api/cart â†’ /cart on cartservice:7070
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -9,7 +9,7 @@ metadata:
     {{- include "hipstershop.labels" . | nindent 4 }}
 spec:
   parentRefs:
-  - name: {{ .Values.gateway.name }}
+  - name: {{ .Values.global.gateway.name }}
   rules:
   - matches:
     - path:
@@ -23,4 +23,5 @@ spec:
           replacePrefixMatch: /cart
     backendRefs:
     - name: cartservice
-      port: {{ .Values.ports.cartservice }}
+      port: {{ .Values.global.ports.cartservice }}
+

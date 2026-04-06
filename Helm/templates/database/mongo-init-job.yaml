@@ -1,7 +1,7 @@
-# ── mongo-init-replicaset Job ─────────────────────────────────────────────────
+﻿# â”€â”€ mongo-init-replicaset Job â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Bootstraps the MongoDB replica set (rs0) and creates all DB users.
 # This Job runs ONCE after StatefulSet pods are ready.
-# backoffLimit: 10 — retries up to 10 times on failure (idempotent script).
+# backoffLimit: 10 â€” retries up to 10 times on failure (idempotent script).
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -21,7 +21,7 @@ spec:
       restartPolicy: OnFailure
       containers:
       - name: mongo-init
-        image: {{ .Values.images.mongodb }}
+        image: {{ .Values.global.images.mongodb }}
         env:
         - name: MONGO_ROOT_USERNAME
           valueFrom:
@@ -138,7 +138,7 @@ spec:
               print('Replica set not initialized yet. Proceeding with rs.initiate().');
               try {
                 rs.initiate({
-                  _id: '{{ .Values.mongodb.replicaSetName }}',
+                  _id: '{{ .Values.global.mongodb.replicaSetName }}',
                   members: [
                     { _id: 0, host: 'mongodb-0.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017', priority: 2 },
                     { _id: 1, host: 'mongodb-1.mongo-headless.{{ .Release.Namespace }}.svc.cluster.local:27017', priority: 1 },
@@ -211,3 +211,4 @@ spec:
           "
 
           echo "MongoDB replica set and admin user setup complete!"
+

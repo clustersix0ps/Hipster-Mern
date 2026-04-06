@@ -1,21 +1,15 @@
 {
   "name": "frontend",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "build:client": "cd client && npm install && npm run build",
+    "start": "npm --prefix client run dev",
+    "build:client": "npm --prefix client ci && npm --prefix client run build",
+    "build:image": "npm run build:client",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
-  "dependencies": {
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.0",
-    "express": "^5.2.1",
-    "http-proxy-middleware": "^3.0.5",
-    "morgan": "^1.10.1"
-  }
+  "dependencies": {}
 }

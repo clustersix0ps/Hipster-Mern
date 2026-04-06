@@ -1,6 +1,6 @@
-# Auth HTTPRoute — routes /api/auth/* to authservice with path rewriting.
+﻿# Auth HTTPRoute â€” routes /api/auth/* to authservice with path rewriting.
 # URLRewrite filter strips the /api/auth prefix before forwarding.
-# Example: /api/auth/login → /login on authservice:8081
+# Example: /api/auth/login â†’ /login on authservice:8081
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -11,7 +11,7 @@ metadata:
     {{- include "hipstershop.labels" . | nindent 4 }}
 spec:
   parentRefs:
-  - name: {{ .Values.gateway.name }}
+  - name: {{ .Values.global.gateway.name }}
   rules:
   - matches:
     - path:
@@ -25,7 +25,7 @@ spec:
           replaceFullPath: /login
     backendRefs:
     - name: authservice
-      port: {{ .Values.ports.authservice }}
+      port: {{ .Values.global.ports.authservice }}
   - matches:
     - path:
         type: Exact
@@ -38,7 +38,7 @@ spec:
           replaceFullPath: /signup
     backendRefs:
     - name: authservice
-      port: {{ .Values.ports.authservice }}
+      port: {{ .Values.global.ports.authservice }}
   - matches:
     - path:
         type: Exact
@@ -51,7 +51,7 @@ spec:
           replaceFullPath: /logout
     backendRefs:
     - name: authservice
-      port: {{ .Values.ports.authservice }}
+      port: {{ .Values.global.ports.authservice }}
   - matches:
     - path:
         type: Exact
@@ -64,4 +64,5 @@ spec:
           replaceFullPath: /me
     backendRefs:
     - name: authservice
-      port: {{ .Values.ports.authservice }}
+      port: {{ .Values.global.ports.authservice }}
+

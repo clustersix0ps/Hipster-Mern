@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongodb
@@ -9,7 +9,7 @@ metadata:
 spec:
   # Must reference the Headless Service for stable Pod DNS
   serviceName: mongo-headless
-  replicas: {{ .Values.mongodb.replicas }}
+  replicas: {{ .Values.global.mongodb.replicas }}
   selector:
     matchLabels:
       app: mongodb
@@ -21,10 +21,10 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
       - name: mongodb
-        image: {{ .Values.images.mongodb }}
+        image: {{ .Values.global.images.mongodb }}
         # --replSet rs0  : enables replica-set mode
         # --bind_ip_all  : listens on all network interfaces (needed for inter-pod comms)
-        command: ["mongod", "--replSet", {{ .Values.mongodb.replicaSetName | quote }}, "--bind_ip_all"]
+        command: ["mongod", "--replSet", {{ .Values.global.mongodb.replicaSetName | quote }}, "--bind_ip_all"]
         ports:
         - containerPort: 27017
           name: mongo
@@ -40,7 +40,7 @@ spec:
               name: mongodb-root
               key: MONGO_ROOT_PASSWORD
         - name: MONGO_INITDB_DATABASE
-          value: {{ .Values.mongodb.initDatabase | quote }}
+          value: {{ .Values.global.mongodb.initDatabase | quote }}
         volumeMounts:
         - name: mongo-data
           mountPath: /data/db
@@ -64,19 +64,20 @@ spec:
           timeoutSeconds: 5
         resources:
           requests:
-            cpu: {{ .Values.resources.mongodb.requests.cpu }}
-            memory: {{ .Values.resources.mongodb.requests.memory }}
+            cpu: {{ .Values.global.resources.mongodb.requests.cpu }}
+            memory: {{ .Values.global.resources.mongodb.requests.memory }}
           limits:
-            cpu: {{ .Values.resources.mongodb.limits.cpu }}
-            memory: {{ .Values.resources.mongodb.limits.memory }}
+            cpu: {{ .Values.global.resources.mongodb.limits.cpu }}
+            memory: {{ .Values.global.resources.mongodb.limits.memory }}
   # volumeClaimTemplates: Kubernetes creates a PVC per Pod (mongo-data-0, 1, 2)
-  # Each PVC is backed by NFS StorageClass → persistent even after Pod restarts
+  # Each PVC is backed by NFS StorageClass â†’ persistent even after Pod restarts
   volumeClaimTemplates:
   - metadata:
       name: mongo-data
     spec:
       accessModes: ["ReadWriteOnce"]
-      storageClassName: {{ .Values.mongodb.storageClass | quote }}
+      storageClassName: {{ .Values.global.mongodb.storageClass | quote }}
       resources:
         requests:
-          storage: {{ .Values.mongodb.storageSize }}
+          storage: {{ .Values.global.mongodb.storageSize }}
+

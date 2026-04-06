@@ -16,4 +16,40 @@ maintainers:
 home: https://github.com/Yampss/HipsterShop
 sources:
   - https://github.com/Yampss/HipsterShop
-dependencies: []
+dependencies:
+  - name: adservice
+    version: 1.0.0
+    repository: "file://services/adservice"
+  - name: assistantservice
+    version: 1.0.0
+    repository: "file://services/assistantservice"
+  - name: authservice
+    version: 1.0.0
+    repository: "file://services/authservice"
+  - name: cartservice
+    version: 1.0.0
+    repository: "file://services/cartservice"
+  - name: checkoutservice
+    version: 1.0.0
+    repository: "file://services/checkoutservice"
+  - name: currencyservice
+    version: 1.0.0
+    repository: "file://services/currencyservice"
+  - name: emailservice
+    version: 1.0.0
+    repository: "file://services/emailservice"
+  - name: frontend
+    version: 1.0.0
+    repository: "file://services/frontend"
+  - name: paymentservice
+    version: 1.0.0
+    repository: "file://services/paymentservice"
+  - name: productcatalogservice
+    version: 1.0.0
+    repository: "file://services/productcatalogservice"
+  - name: recommendationservice
+    version: 1.0.0
+    repository: "file://services/recommendationservice"
+  - name: shippingservice
+    version: 1.0.0
+    repository: "file://services/shippingservice"

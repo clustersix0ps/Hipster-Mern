@@ -1,0 +1,6 @@
+﻿apiVersion: v2
+name: checkoutservice
+description: HipsterShop checkoutservice microservice chart
+type: application
+version: 1.0.0
+appVersion: "1.0.0"

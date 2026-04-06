@@ -1,4 +1,4 @@
-{{/*
+﻿{{/*
 ===========================================================
   HipsterShop Helm Helpers
   Reusable template snippets for all chart templates.
@@ -23,7 +23,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{/*
-Release namespace — used throughout templates.
+Release namespace â€” used throughout templates.
 Usage: {{ template "hipstershop.namespace" . }}
 */}}
 {{- define "hipstershop.namespace" -}}
@@ -45,23 +45,23 @@ Args (via dict): .db = database name, .authSource = auth source db.
 Usage:
   value: "mongodb://$(MONGO_USERNAME):$(MONGO_PASSWORD)@{{ include "hipstershop.mongoHosts" . }}/{{ .db }}?replicaSet=rs0&authSource={{ .authSource }}&authMechanism=SCRAM-SHA-256"
 Note: $(MONGO_USERNAME) & $(MONGO_PASSWORD) are K8s env-var references
-      resolved at container start — NOT Helm template expressions.
+      resolved at container start â€” NOT Helm template expressions.
 */}}
 
 {{/*
-RollingUpdate strategy block — shared across all Deployments.
+RollingUpdate strategy block â€” shared across all Deployments.
 */}}
 {{- define "hipstershop.rollingUpdate" -}}
 strategy:
   type: RollingUpdate
   rollingUpdate:
-    maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable }}
-    maxSurge: {{ .Values.rollingUpdate.maxSurge }}
+    maxUnavailable: {{ .Values.global.rollingUpdate.maxUnavailable }}
+    maxSurge: {{ .Values.global.rollingUpdate.maxSurge }}
 {{- end }}
 
 {{/*
 Standard resource block for most services.
-Usage: {{ include "hipstershop.resources" .Values.resources.standard }}
+Usage: {{ include "hipstershop.resources" .Values.global.resources.standard }}
 */}}
 {{- define "hipstershop.resourcesStandard" -}}
 resources:
@@ -72,3 +72,4 @@ resources:
     cpu: 200m
     memory: 128Mi
 {{- end }}
+

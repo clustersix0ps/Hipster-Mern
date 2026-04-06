@@ -1,4 +1,4 @@
-# Currency HTTPRoute — two rules with URL rewrites
+﻿# Currency HTTPRoute â€” two rules with URL rewrites
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -9,7 +9,7 @@ metadata:
     {{- include "hipstershop.labels" . | nindent 4 }}
 spec:
   parentRefs:
-  - name: {{ .Values.gateway.name }}
+  - name: {{ .Values.global.gateway.name }}
   rules:
   - matches:
     - path:
@@ -23,7 +23,7 @@ spec:
           replaceFullPath: /currencies
     backendRefs:
     - name: currencyservice
-      port: {{ .Values.ports.currencyservice }}
+      port: {{ .Values.global.ports.currencyservice }}
   - matches:
     - path:
         type: Exact
@@ -36,4 +36,5 @@ spec:
           replaceFullPath: /convert
     backendRefs:
     - name: currencyservice
-      port: {{ .Values.ports.currencyservice }}
+      port: {{ .Values.global.ports.currencyservice }}
+
