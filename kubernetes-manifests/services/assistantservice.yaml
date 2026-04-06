@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: server
-        image: savitxr/trf-assistantservice-hipster:latest
+        image: savitxr/assistantservice-hipster:latest
         ports:
         - containerPort: 8080
         envFrom:
@@ -71,4 +71,5 @@ spec:
   - name: http
     port: 8080
     targetPort: 8080
+
 

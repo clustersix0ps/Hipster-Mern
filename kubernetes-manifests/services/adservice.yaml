@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: savitxr/trf-adservice-hipster:latest
+        image: savitxr/adservice-hipster:latest
         ports:
         - containerPort: 9555
         envFrom:
@@ -76,4 +76,5 @@ spec:
   - name: http
     port: 9555
     targetPort: 9555
+
 

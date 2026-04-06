@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: savitxr/trf-emailservice-hipster:latest
+        image: savitxr/emailservice-hipster:latest
         ports:
         - containerPort: 8080
         envFrom:
@@ -90,4 +90,5 @@ spec:
   - name: http
     port: 8080
     targetPort: 8080
+
 

@@ -1,17 +1,17 @@
 ﻿global:
   images:
-    adservice:              savitxr/trf-adservice-hipster:latest
-    assistantservice:       savitxr/trf-assistantservice-hipster:latest
-    authservice:            savitxr/trf-authservice-hipster:latest
-    cartservice:            savitxr/trf-cartservice-hipster:v1
-    checkoutservice:        savitxr/trf-checkoutservice-hipster:latest
-    currencyservice:        savitxr/trf-currencyservice-hipster:latest
-    emailservice:           savitxr/trf-emailservice-hipster:latest
-    frontend:               savitxr/trf-frontend-hipster:v2
-    paymentservice:         savitxr/trf-paymentservice-hipster:latest
-    productcatalogservice:  savitxr/trf-productcatalogservice-hipster:v1
-    recommendationservice:  savitxr/trf-recommendationservice-hipster:latest
-    shippingservice:        savitxr/trf-shippingservice-hipster:latest
+    adservice:              savitxr/adservice-hipster:latest
+    assistantservice:       savitxr/assistantservice-hipster:latest
+    authservice:            savitxr/authservice-hipster:latest
+    cartservice:            savitxr/cartservice-hipster:latest
+    checkoutservice:        savitxr/checkoutservice-hipster:latest
+    currencyservice:        savitxr/currencyservice-hipster:latest
+    emailservice:           savitxr/emailservice-hipster:latest
+    frontend:               savitxr/frontend-hipster:latest
+    paymentservice:         savitxr/paymentservice-hipster:latest
+    productcatalogservice:  savitxr/productcatalogservice-hipster:latest
+    recommendationservice:  savitxr/recommendationservice-hipster:latest
+    shippingservice:        savitxr/shippingservice-hipster:latest
     mongodb:                mongo:7.0
     loadgenerator:          busybox:1.28
   
@@ -182,5 +182,6 @@
         cpu:    500m
         memory: 512Mi
   
+
 
 

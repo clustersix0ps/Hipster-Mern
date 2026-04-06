@@ -51,7 +51,7 @@ spec:
           echo "Cart Mongo auth ready."
       containers:
       - name: server
-        image: savitxr/trf-cartservice-hipster:v1
+        image: savitxr/cartservice-hipster:latest
         ports:
         - containerPort: 7070
         envFrom:
@@ -116,4 +116,5 @@ spec:
   - name: http
     port: 7070
     targetPort: 7070
+
 

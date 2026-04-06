@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: savitxr/trf-checkoutservice-hipster:latest
+          image: savitxr/checkoutservice-hipster:latest
           ports:
           - containerPort: 5050
           readinessProbe:
@@ -122,4 +122,5 @@ spec:
   - name: http
     port: 5050
     targetPort: 5050
+
 

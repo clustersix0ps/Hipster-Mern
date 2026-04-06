@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: savitxr/trf-currencyservice-hipster:latest
+        image: savitxr/currencyservice-hipster:latest
         ports:
         - name: http
           containerPort: 7000
@@ -72,4 +72,5 @@ spec:
   - name: http
     port: 7000
     targetPort: 7000
+
 

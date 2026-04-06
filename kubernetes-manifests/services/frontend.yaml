@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: savitxr/trf-frontend-hipster:v2
+          image: savitxr/frontend-hipster:latest
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -83,4 +83,5 @@ spec:
   - name: http
     port: 80
     targetPort: 8080
+
 

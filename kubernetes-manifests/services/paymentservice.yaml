@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: savitxr/trf-paymentservice-hipster:latest
+        image: savitxr/paymentservice-hipster:latest
         ports:
         - containerPort: 50051
         envFrom:
@@ -93,4 +93,5 @@ spec:
   - name: http
     port: 50051
     targetPort: 50051
+
 

@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: server
-        image: savitxr/trf-shippingservice-hipster:latest
+        image: savitxr/shippingservice-hipster:latest
         ports:
         - containerPort: 50051
         envFrom:
@@ -66,4 +66,5 @@ spec:
   - name: http
     port: 50051
     targetPort: 50051
+
 
