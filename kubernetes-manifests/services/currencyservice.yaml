@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: hipster
@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: cazzzzz/trf-currencyservice-hipster:latest
+        image: savitxr/trf-currencyservice-hipster:latest
         ports:
         - name: http
           containerPort: 7000
@@ -72,3 +72,4 @@ spec:
   - name: http
     port: 7000
     targetPort: 7000
+

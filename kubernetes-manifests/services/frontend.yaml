@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: hipster
@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: cazzzzz/trf-frontend-hipster:v2
+          image: savitxr/trf-frontend-hipster:v2
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -83,3 +83,4 @@ spec:
   - name: http
     port: 80
     targetPort: 8080
+

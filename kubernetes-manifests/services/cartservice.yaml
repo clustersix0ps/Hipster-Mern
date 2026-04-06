@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: hipster
@@ -51,7 +51,7 @@ spec:
           echo "Cart Mongo auth ready."
       containers:
       - name: server
-        image: cazzzzz/trf-cartservice-hipster:v1
+        image: savitxr/trf-cartservice-hipster:v1
         ports:
         - containerPort: 7070
         envFrom:
@@ -116,3 +116,4 @@ spec:
   - name: http
     port: 7070
     targetPort: 7070
+

@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: assistantservice
@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: server
-        image: cazzzzz/trf-assistantservice-hipster:latest
+        image: savitxr/trf-assistantservice-hipster:latest
         ports:
         - containerPort: 8080
         envFrom:
@@ -71,3 +71,4 @@ spec:
   - name: http
     port: 8080
     targetPort: 8080
+

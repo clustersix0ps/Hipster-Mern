@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: hipster
@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: cazzzzz/trf-checkoutservice-hipster:latest
+          image: savitxr/trf-checkoutservice-hipster:latest
           ports:
           - containerPort: 5050
           readinessProbe:
@@ -122,3 +122,4 @@ spec:
   - name: http
     port: 5050
     targetPort: 5050
+

@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: hipster
@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: cazzzzz/trf-adservice-hipster:latest
+        image: savitxr/trf-adservice-hipster:latest
         ports:
         - containerPort: 9555
         envFrom:
@@ -76,3 +76,4 @@ spec:
   - name: http
     port: 9555
     targetPort: 9555
+

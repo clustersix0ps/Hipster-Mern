@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: hipster
@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: cazzzzz/trf-emailservice-hipster:latest
+        image: savitxr/trf-emailservice-hipster:latest
         ports:
         - containerPort: 8080
         envFrom:
@@ -90,3 +90,4 @@ spec:
   - name: http
     port: 8080
     targetPort: 8080
+

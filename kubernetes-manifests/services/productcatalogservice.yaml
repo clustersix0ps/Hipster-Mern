@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: hipster
@@ -23,7 +23,7 @@ spec:
       terminationGracePeriodSeconds: 5
       containers:
       - name: server
-        image: cazzzzz/trf-productcatalogservice-hipster:v1
+        image: savitxr/trf-productcatalogservice-hipster:v1
         ports:
         - containerPort: 3550
         envFrom:
@@ -95,3 +95,4 @@ spec:
   - name: http
     port: 3550
     targetPort: 3550
+

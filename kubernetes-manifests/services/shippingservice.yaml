@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: hipster
@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: server
-        image: cazzzzz/trf-shippingservice-hipster:latest
+        image: savitxr/trf-shippingservice-hipster:latest
         ports:
         - containerPort: 50051
         envFrom:
@@ -66,3 +66,4 @@ spec:
   - name: http
     port: 50051
     targetPort: 50051
+
