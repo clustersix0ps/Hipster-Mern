@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+// Normalize product picture path: MongoDB stores /static/img/products/x.jpg
+// We serve images from /img/products/ in nginx
+function imgSrc(picture) {
+  if (!picture) return '/img/products/mug.jpg';
+  // Strip /static prefix since we serve them directly
+  return picture.replace(/^\/static/, '');
+}
+
 function formatMoney(priceObj, currency) {
   if (!priceObj) return '$0.00';
   const amount = priceObj.units + (priceObj.nanos / 1e9);
@@ -60,9 +68,9 @@ function HomePage({ currency, user, onCartChange }) {
                   <Link to={`/product/${p.id}`}>
                     <img
                       loading="lazy"
-                      src={p.picture || `/static/img/products/${p.id}.jpg`}
+                      src={imgSrc(p.picture)}
                       alt={p.name}
-                      onError={e => { e.target.src = '/static/img/products/mug.jpg'; }}
+                      onError={e => { e.target.src = '/img/products/mug.jpg'; }}
                     />
                     <div className="hot-product-card-img-overlay"></div>
                   </Link>

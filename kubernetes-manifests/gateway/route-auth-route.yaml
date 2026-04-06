@@ -3,13 +3,13 @@ kind: HTTPRoute
 metadata:
   namespace: hipster
   name: auth-route
-
   labels:
     app: authservice
 spec:
   parentRefs:
     - name: hipstershop-gateway
   rules:
+    # POST /api/auth/login -> authservice /auth/login
     - matches:
         - path:
             type: Exact
@@ -19,10 +19,25 @@ spec:
           urlRewrite:
             path:
               type: ReplaceFullPath
-              replaceFullPath: /login
+              replaceFullPath: /auth/login
       backendRefs:
         - name: authservice
           port: 8081
+    # POST /api/auth/register -> authservice /auth/register
+    - matches:
+        - path:
+            type: Exact
+            value: /api/auth/register
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /auth/register
+      backendRefs:
+        - name: authservice
+          port: 8081
+    # Legacy /api/auth/signup alias
     - matches:
         - path:
             type: Exact
@@ -32,23 +47,11 @@ spec:
           urlRewrite:
             path:
               type: ReplaceFullPath
-              replaceFullPath: /signup
+              replaceFullPath: /auth/register
       backendRefs:
         - name: authservice
           port: 8081
-    - matches:
-        - path:
-            type: Exact
-            value: /api/auth/logout
-      filters:
-        - type: URLRewrite
-          urlRewrite:
-            path:
-              type: ReplaceFullPath
-              replaceFullPath: /logout
-      backendRefs:
-        - name: authservice
-          port: 8081
+    # GET /api/auth/me -> authservice /auth/me
     - matches:
         - path:
             type: Exact
@@ -58,7 +61,21 @@ spec:
           urlRewrite:
             path:
               type: ReplaceFullPath
-              replaceFullPath: /me
+              replaceFullPath: /auth/me
+      backendRefs:
+        - name: authservice
+          port: 8081
+    # POST /api/auth/logout -> authservice /auth/logout
+    - matches:
+        - path:
+            type: Exact
+            value: /api/auth/logout
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /auth/logout
       backendRefs:
         - name: authservice
           port: 8081

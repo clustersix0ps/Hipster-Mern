@@ -3,23 +3,24 @@ kind: HTTPRoute
 metadata:
   namespace: hipster
   name: recommendation-route
-  
   labels:
     app: recommendationservice
 spec:
   parentRefs:
     - name: hipstershop-gateway
   rules:
+    # GET /api/recommendations -> recommendationservice /recommendation/
+    # (service mounts routes at /recommendation, handler is at GET /)
     - matches:
         - path:
-            type: Exact
+            type: PathPrefix
             value: /api/recommendations
       filters:
         - type: URLRewrite
           urlRewrite:
             path:
-              type: ReplaceFullPath
-              replaceFullPath: /recommendations
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /recommendation
       backendRefs:
         - name: recommendationservice
           port: 8080
