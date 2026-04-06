@@ -3,13 +3,21 @@ kind: HTTPRoute
 metadata:
   namespace: hipster
   name: frontend-route
-  
   labels:
     app: frontend
 spec:
   parentRefs:
     - name: hipstershop-gateway
   rules:
+    # Vite production build assets (hashed JS/CSS)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /assets/
+      backendRefs:
+        - name: frontend
+          port: 80
+    # Static files (legacy /static/ path + svgs at root)
     - matches:
         - path:
             type: PathPrefix
@@ -17,13 +25,30 @@ spec:
       backendRefs:
         - name: frontend
           port: 80
+    # Favicon and icon SVGs served from root
     - matches:
         - path:
             type: Exact
+            value: /favicon.svg
+      backendRefs:
+        - name: frontend
+          port: 80
+    - matches:
+        - path:
+            type: Exact
+            value: /icons.svg
+      backendRefs:
+        - name: frontend
+          port: 80
+    # Health check
+    - matches:
+        - path:
+            type: PathPrefix
             value: /_healthz
       backendRefs:
         - name: frontend
           port: 80
+    # App routes
     - matches:
         - path:
             type: PathPrefix
@@ -66,6 +91,7 @@ spec:
       backendRefs:
         - name: frontend
           port: 80
+    # Root - must be last (most specific wins in Gateway API)
     - matches:
         - path:
             type: Exact
