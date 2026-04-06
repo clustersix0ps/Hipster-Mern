@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
+// Strip /static prefix since images are served at /img/products/ not /static/img/products/
+function imgSrc(picture) {
+  if (!picture) return '/img/products/mug.jpg';
+  return picture.replace(/^\/static/, '');
+}
+
 function formatMoney(priceObj, currency) {
   if (!priceObj) return '$0.00';
   const amount = priceObj.units + (priceObj.nanos / 1e9);
@@ -26,9 +32,20 @@ function ProductPage({ currency, user, onCartChange }) {
       .then(data => setProduct(data?.product || data))
       .catch(() => {});
 
-    fetch(`/api/recommendations`)
-      .then(r => r.ok ? r.json() : { products: [] })
-      .then(data => setRecommendations((data.products || []).slice(0, 4)))
+    fetch(`/api/recommendations?productIds=${id}`)
+      .then(r => r.ok ? r.json() : { productIds: [] })
+      .then(async data => {
+        const ids = (data.productIds || []).slice(0, 4);
+        const products = await Promise.all(
+          ids.map(pid =>
+            fetch(`/api/products/${pid}`)
+              .then(r => r.ok ? r.json() : null)
+              .then(d => d?.product || d)
+              .catch(() => null)
+          )
+        );
+        setRecommendations(products.filter(Boolean));
+      })
       .catch(() => {});
   }, [id]);
 
@@ -64,8 +81,8 @@ function ProductPage({ currency, user, onCartChange }) {
             <img
               className="product-image"
               alt={product.name}
-              src={product.picture || `/static/img/products/${id}.jpg`}
-              onError={e => { e.target.src = '/static/img/products/mug.jpg'; }}
+              src={imgSrc(product.picture)}
+              onError={e => { e.target.src = '/img/products/mug.jpg'; }}
             />
           </div>
           <div className="product-info col-md-5">
@@ -107,9 +124,9 @@ function ProductPage({ currency, user, onCartChange }) {
                 <div key={r.id} className="col-md-3 col-6" style={{ marginBottom: '24px' }}>
                   <a href={`/product/${r.id}`}>
                     <img
-                      src={r.picture || `/static/img/products/${r.id}.jpg`}
+                      src={imgSrc(r.picture)}
                       alt={r.name}
-                      onError={e => { e.target.src = '/static/img/products/mug.jpg'; }}
+                      onError={e => { e.target.src = '/img/products/mug.jpg'; }}
                     />
                     <h5>{r.name}</h5>
                   </a>

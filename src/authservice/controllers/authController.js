@@ -12,22 +12,28 @@ const generateToken = (id) => {
 // @access  Public
 const registerUser = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { name, email, password } = req.body;
 
-        const userExists = await User.findOne({ username });
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required' });
+        }
+
+        const userExists = await User.findOne({ email: email.toLowerCase() });
         if (userExists) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
         const user = await User.create({
-            username,
+            email: email.toLowerCase(),
+            name: name || '',
             password
         });
 
         if (user) {
             res.status(201).json({
                 _id: user._id,
-                username: user.username,
+                email: user.email,
+                name: user.name,
                 token: generateToken(user._id),
             });
         } else {
@@ -43,18 +49,23 @@ const registerUser = async (req, res) => {
 // @access  Public
 const authUser = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
-        const user = await User.findOne({ username });
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required' });
+        }
+
+        const user = await User.findOne({ email: email.toLowerCase() });
 
         if (user && (await user.matchPassword(password))) {
             res.json({
                 _id: user._id,
-                username: user.username,
+                email: user.email,
+                name: user.name,
                 token: generateToken(user._id),
             });
         } else {
-            res.status(401).json({ message: 'Invalid username or password' });
+            res.status(401).json({ message: 'Invalid email or password' });
         }
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });

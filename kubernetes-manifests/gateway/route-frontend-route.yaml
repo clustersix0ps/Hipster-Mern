@@ -25,6 +25,14 @@ spec:
       backendRefs:
         - name: frontend
           port: 80
+    # Product images served from /img/ path
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /img/
+      backendRefs:
+        - name: frontend
+          port: 80
     # Favicon and icon SVGs served from root
     - matches:
         - path:
