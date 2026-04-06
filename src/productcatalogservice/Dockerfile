@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 
 # Dependencies
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 
 # Copy app source
 COPY . .
@@ -15,4 +15,5 @@ EXPOSE 3550
 
 # Run the app
 CMD [ "npm", "start" ]
+
 

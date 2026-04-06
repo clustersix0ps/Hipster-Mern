@@ -3,11 +3,12 @@
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 
 COPY . .
 
 EXPOSE 9555
 
 CMD [ "npm", "start" ]
+
 
