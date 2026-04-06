@@ -1,9 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: mongodb-shared
   namespace: hipster
 spec:
+  serviceName: mongodb-shared-headless
+  replicas: 1
   selector:
     matchLabels:
       app: mongodb-shared
@@ -17,6 +19,37 @@ spec:
         image: mongo:6.0
         ports:
         - containerPort: 27017
+        volumeMounts:
+        - name: data
+          mountPath: /data/db
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 300m
+            memory: 256Mi
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-shared-headless
+  namespace: hipster
+spec:
+  clusterIP: None
+  selector:
+    app: mongodb-shared
+  ports:
+  - port: 27017
+    targetPort: 27017
 ---
 apiVersion: v1
 kind: Service
