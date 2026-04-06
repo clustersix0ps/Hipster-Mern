@@ -86,8 +86,15 @@ spec:
           port: 80
     - matches:
         - path:
-            type: Exact
+            type: PathPrefix
             value: /logout
+      backendRefs:
+        - name: frontend
+          port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /order/
       backendRefs:
         - name: frontend
           port: 80
