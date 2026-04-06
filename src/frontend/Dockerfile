@@ -1,11 +1,11 @@
-﻿FROM node:20-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /usr/src/app
 
 # Build React client
 WORKDIR /usr/src/app/client
 COPY client/package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY client/ ./
 RUN npm run build
